@@ -1,0 +1,72 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Variables globales ─────────────────────────────────────────────────────── */
+:root {
+  --bg-page: #eef2ff;
+  --bg-page-end: #e0e7ff;
+  --brand-from: #6366f1;
+  --brand-to: #8b5cf6;
+  --card-bg: #ffffff;
+  --text-primary: #1e1b4b;
+  --text-secondary: #4b5563;
+  --text-muted: #9ca3af;
+  --border-light: #e5e7eb;
+}
+
+/* ── Reset base ─────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  @apply font-sans antialiased;
+  background: linear-gradient(160deg, var(--bg-page) 0%, var(--bg-page-end) 100%);
+  min-height: 100vh;
+  color: var(--text-primary);
+}
+
+/* ── Componentes reutilizables ──────────────────────────────────────────────── */
+@layer components {
+  /* Botón principal degradado */
+  .btn-primary {
+    @apply inline-flex items-center justify-center gap-2 px-8 py-3 rounded-full font-semibold text-white
+           transition-all duration-200 select-none;
+    background: linear-gradient(135deg, var(--brand-from) 0%, var(--brand-to) 100%);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+  }
+  .btn-primary:active { transform: translateY(0); }
+  .btn-primary:disabled {
+    @apply opacity-60 cursor-not-allowed;
+    transform: none !important;
+  }
+
+  /* Tarjeta base */
+  .card {
+    @apply bg-white rounded-2xl shadow-sm border border-gray-100 p-6;
+  }
+
+  /* Badge/pill */
+  .badge {
+    @apply inline-flex items-center gap-1.5 px-4 py-1.5 rounded-full text-sm font-medium;
+    background: rgba(99, 102, 241, 0.10);
+    color: var(--brand-from);
+    border: 1px solid rgba(99, 102, 241, 0.20);
+  }
+
+  /* Spinner de carga */
+  .spinner {
+    @apply w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin;
+  }
+}
+
+/* ── Scrollbar suave ────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { @apply bg-indigo-200 rounded-full; }

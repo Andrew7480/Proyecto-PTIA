@@ -35,7 +35,7 @@
 
 ## 🚀 Requisitos Previos
 
-- *Requisitos Previos
+- *Requisitos Previos*
 
 - Python 3.10+
 - Node.js 18+ con npm
@@ -43,7 +43,7 @@
 
 ## 🛠️ Instalación Previa
 
-###Instalación
+### Instalación
 
 ```bash
 # Clonar y preparar backend
@@ -71,7 +71,7 @@ python run_dev.py
 ```
 ---
 
-###Ejecución
+### Ejecución
 
 ### Opción 1: Automático (RECOMENDADO)
 

@@ -1,4 +1,4 @@
-# 🧠 EmocionIA — Detección de Estados Emocionales en Texto
+# EmocionIA — Detección de Estados Emocionales en Texto
 
 <div align="center">
   <img src="https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi" alt="FastAPI" />
@@ -10,13 +10,13 @@
 
 <br>
 
-> **Proyecto académico desarrollado para el curso de Principios y Tecnologías de Inteligencia Artificial (PTIA) en la Escuela Colombiana de Ingeniería Julio Garavito.**
+> Proyecto académico para el curso de Principios y Tecnologías de Inteligencia Artificial (PTIA) en la Escuela Colombiana de Ingeniería Julio Garavito.
 > 
-> MVP funcional de arquitectura cliente-servidor que utiliza modelos Transformer de estado del arte (SOTA) para analizar texto informal en español y clasificarlo en seis estados emocionales: alegría, tristeza, enojo, miedo, sorpresa y disgusto.
+> MVP de arquitectura cliente-servidor que utiliza modelos Transformer para analizar texto informal en español y clasificarlo en seis estados emocionales.
 
 ---
 
-## 📸 Interfaz del Proyecto
+## Interfaz
 
 
 | Análisis de Emociones | Historial de Evaluaciones |
@@ -25,98 +25,120 @@
 
 ---
 
-## 🏗️ Arquitectura del Sistema
+## Arquitectura
 
-El proyecto implementa una arquitectura desacoplada para aislar la pesada carga del procesamiento tensorial de la interfaz de usuario:
-
-1. **Frontend (React + Vite):** Captura el texto en tiempo real, gestiona el estado y el historial local (LocalStorage) y renderiza las probabilidades.
-2. **Backend (FastAPI):** Expone un endpoint RESTful (`/api/analyze`) con manejo estricto de CORS.
-3. **Capa de Inteligencia (Hugging Face / PyTorch):** Utiliza Transfer Learning mediante el modelo `RoBERTuito`, aplicando preprocesamiento nativo para español (normalización de modismos y emojis) e infiriendo vectores de probabilidad mediante *Softmax*.
+1. **Frontend (React + Vite):** Interfaz para capturar texto y mostrar análisis
+2. **Backend (FastAPI):** Endpoint RESTful `/api/analyze` con CORS configurado
+3. **Modelo (Hugging Face / PyTorch):** RoBERTuito para análisis de emociones en español
 
 ---
 
 ## 🚀 Requisitos Previos
 
-- **Python 3.10+**
-- **Node.js 18+** y npm
-- Conexión a internet estable (la primera ejecución descargará los pesos del modelo neuronal: ~500 MB).
+- *Requisitos Previos
+
+- Python 3.10+
+- Node.js 18+ con npm
+- Conexión a internet (primera ejecución descarga 500 MB del modelo)
+
+## 🛠️ Instalación Previa
+
+###Instalación
+
+```bash
+# Clonar y preparar backend
+git clone <repository-url>
+cd Proyecto-PTIA
+cd backend
+python -m venv venv
+venv\Scripts\activate  # Windows
+# source venv/bin/activate  # macOS/Linux
+pip install -r requirements.txt
+cd ..
+
+# Preparar frontend
+cd ..
+```
 
 ---
 
-## 🛠️ Instalación y Ejecución
+## 🚀 Ejecución
 
-### 1. Backend (Servidor de IA)
+### ✨ Opción 1: Script Python (RECOMENDADO - más confiable en Windows)
 
-Abre una terminal y ejecuta:
+```bash
+python run_dev.py
+```
+---
 
+###Ejecución
+
+### Opción 1: Automático (RECOMENDADO)
+
+```bash
+python run_dev.py
+```
+
+Inicia backend (puerto 8089) y frontend (puerto 5173) automáticamente.
+
+### Opción 2: Manual
+
+**Terminal 1 - Backend:**
 ```bash
 cd backend
-
-# Crear y activar entorno virtual
-python -m venv venv
-# En Windows:
-venv\Scripts\activate
-# En macOS/Linux:
-source venv/bin/activate
-
-# Instalar dependencias exactas para evitar conflictos
-pip install -r requirements.txt
-
-# Levantar servidor
-uvicorn main:app --reload
-
+python -m uvicorn main:app --host 127.0.0.1 --port 8089
 ```
 
-> La API estará disponible en: `http://localhost:8000`  
-> Documentación interactiva (Swagger UI): `http://localhost:8000/docs`
-
-### 2. Frontend (Interfaz de Usuario)
-
-Abre una **segunda terminal**, mantén el backend corriendo, y ejecuta:
-
-```bash
-cd frontend
-npm install
-npm run dev
-```
-
-> La aplicación web estará disponible en: `http://localhost:5173`
+**Terminal 2 - Frontend
+| Servicio | URL |
+|----------|-----|
+| **Frontend** | `http://localhost:5173` |
+| **API** | `http://localhost:8089` |
+| **Swagger (Docs)** | `http://localhost:8089/docs` |
 
 ---
 
-## 📡 Endpoint de la API
+## ⚠️ Solución de problemas
 
-### `POST /api/analyze`
+### Error `torch.lib.shm.dll` en Windows
 
-**Request Body:**
-```json
-{ 
-  "text": "¡Qué coraje! Me robaron el celular en el camión y nadie hizo nada." 
-}
+Este es un problema conocido de PyTorch en Windows que ocurre cuando se usa `--reload`:
 
-**Response:**
+**Solución automática:** Usa `python run_dev.py` (sin `--reload`). Es lo recomendado.
 
-```json
-{
-  "emotion": "Enojo",
-  "confidence": 89.5,
-  "emoji": "😠",
-  "scores": {
-    "Alegría":  0.9,
-    "Tristeza":  0.8,
-    "Enojo":     89.5,
-    "Miedo":     0.9,
-    "Sorpresa":  1.4,
-    "Disgusto":  4.1,
-    "Others":    2.4
-  }
-}
+**Si deseas usar `--reload` manualmente:**
+```powershell
+$env:OMP_NUM_THREADS = "1"
+$env:MKL_NUM_THREADS = "1"
+cd backend
+python -m uvicorn main:app --host 127.0.0.1 --port 8089
 ```
-## 🧠 Modelo de IA
 
-- **Modelo Base:** `pysentimiento/robertuito-emotion-analysis`
-- **Técnica:** Transfer Learning / Zero-shot inference
-- **Corpus de Entrenamiento:** TASS / Tweets en español (Latinoamérica y España).
+Si aún así falla, reinicia el comando. El primer intento puede fallar, pero el segundo suele funcionar.
+
+### El frontend no conecta con el backend
+
+Verifica que:
+1. El backend está corriendo en `http://localhost:8089`
+2. Los puertos 8089 y 5173 estén disponibles (no bloqueados por firewall)
+3. En el navegador, abre `http://localhost:8089/docs` para confirmar que la API responde
+
+### Primera ejecución lenta
+Accesos
+
+| Servicio | URL |
+|----------|-----|
+| Frontend | http://localhost:5173 |
+| API | http://localhost:8089 |
+| Swagger (Docs) | http://localhost:8089/docs
+### npm no encontrado
+
+Si ves `npm: command not found`, asegúrate de tener Node.js instalado desde https://nodejs.org/
+Notas
+
+- Primera análisis: 30-60 segundos (descarga y compilación del modelo)
+- Análisis posteriores: instantáneos
+- En Windows, `run_dev.py` configura automáticamente variables de entorno para PyTorch
 - **Métricas MVP:** Accuracy: 66.7% | F1-Score: 61.0% (Evaluado con dataset de prueba informal incluyendo modismos y sarcasmo).
 
 ---
